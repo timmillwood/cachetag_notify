@@ -11,6 +11,8 @@ use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ConnectException;
 
 /**
  * Cache tags invalidator implementation that notifies a thirdparty.
@@ -34,7 +36,7 @@ class CacheTagsInvalidator implements CacheTagsInvalidatorInterface {
   /**
    * Constructs a CacheTagsInvalidator object.
    *
-   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Drupal Config.
    * @param \GuzzleHttp\ClientInterface $http_client
    *   A Guzzle client object.
@@ -54,12 +56,20 @@ class CacheTagsInvalidator implements CacheTagsInvalidatorInterface {
       return;
     }
 
-    \Drupal::logger('CacheTag Notify')->log('notice', print_r($tags, TRUE));
     try {
       $this->httpClient->post($endpoint_url, [ 'body' => json_encode($tags) ]);
     }
     catch (ClientException $e) {
       watchdog_exception('CacheTag Notify', $e->getResponse());
+    }
+    catch (ServerException $e) {
+      watchdog_exception('CacheTag Notify', $e->getResponse());
+    }
+    catch (ConnectException $e) {
+      watchdog_exception('CacheTag Notify', $e);
+    }
+    catch (Exception $e) {
+      watchdog_exception('CacheTag Notify', $e);
     }
   }
 
