@@ -50,16 +50,16 @@ class CacheTagsInvalidator implements CacheTagsInvalidatorInterface {
   public function invalidateTags(array $tags) {
     $endpoint_url = $this->config->get('endpoint');
     if (empty($endpoint_url)) {
-      \Drupal::logger('CacheTags Notify')->log('error', 'No endpoint set');
+      \Drupal::logger('CacheTag Notify')->log('error', 'No endpoint set');
       return;
     }
 
-    \Drupal::logger('CacheTags Notify')->log('notice', print_r($tags, TRUE));
+    \Drupal::logger('CacheTag Notify')->log('notice', print_r($tags, TRUE));
     try {
       $this->httpClient->post($endpoint_url, [ 'body' => json_encode($tags) ]);
     }
     catch (ClientException $e) {
-      watchdog_exception('CacheTags Notify', $e->getResponse());
+      watchdog_exception('CacheTag Notify', $e->getResponse());
     }
   }
 
