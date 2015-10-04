@@ -17,7 +17,7 @@ class CachetagNotifySettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormID() {
-    return 'cachtag_notify_settings';
+    return 'cachetag_notify_settings';
   }
 
   /**
@@ -87,4 +87,6 @@ class CachetagNotifySettingsForm extends ConfigFormBase {
       }
     }
   }
+
 }
+
