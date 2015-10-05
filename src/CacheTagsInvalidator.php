@@ -60,10 +60,10 @@ class CacheTagsInvalidator implements CacheTagsInvalidatorInterface {
       $this->httpClient->post($endpoint_url, [ 'body' => json_encode($tags) ]);
     }
     catch (ClientException $e) {
-      watchdog_exception('CacheTag Notify', $e->getResponse());
+      watchdog_exception('CacheTag Notify', $e);
     }
     catch (ServerException $e) {
-      watchdog_exception('CacheTag Notify', $e->getResponse());
+      watchdog_exception('CacheTag Notify', $e);
     }
     catch (ConnectException $e) {
       watchdog_exception('CacheTag Notify', $e);
